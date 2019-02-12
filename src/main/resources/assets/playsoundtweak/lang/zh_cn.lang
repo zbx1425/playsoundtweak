@@ -1,0 +1,6 @@
+tile.speakerblock.name=放音喇叭
+gui.speakerblock.title=PlaySound 放音喇叭
+gui.speakerblock.credit=编程: Zbx1425 (newbieZBX)
+gui.speakerblock.hint=填入要播放的声音事件名称:
+gui.speakerblock.constvol.nop=[X]音量随距改变 [ ]音量始终不变
+gui.speakerblock.constvol.yes=[ ]音量随距改变 [X]音量始终不变

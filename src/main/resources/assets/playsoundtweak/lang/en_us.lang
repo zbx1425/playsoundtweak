@@ -1,0 +1,6 @@
+tile.speakerblock.name=LoudSpeaker
+gui.speakerblock.title=PlaySoundTweak™ LoudSpeaker
+gui.speakerblock.credit=Programmed by Zbx1425 (newbieZBX)
+gui.speakerblock.hint=Name of the sound event:
+gui.speakerblock.constvol.nop=Volume: [X]Ambient [ ]Constant
+gui.speakerblock.constvol.yes=Volume: [ ]Ambient [X]Constant
