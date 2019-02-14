@@ -3,6 +3,7 @@ package net.zbx1425.playsoundtweak;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.audio.ISound;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -11,14 +12,21 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEntitySpeaker extends TileEntity {
-    public String soundname;
-    public boolean constvol;
-    public boolean previousRedstoneState;
+    public String soundname = "";
+    public boolean constvol = false;
+    public boolean longtrig = false;
+    public boolean previousRedstoneState = false;
+    
+    //A workaround to get this working on servers.
+    @SideOnly(Side.CLIENT)
+    public Object soundcache;
     
     public TileEntitySpeaker() {
-    	soundname = "minecraft:entity.minecart.inside";
+    	soundname = "block.note.harp";
     }
 
     public NBTTagCompound writeToNBT(NBTTagCompound compound)
@@ -28,6 +36,7 @@ public class TileEntitySpeaker extends TileEntity {
         compound.setString("soundname", this.soundname);
         compound.setBoolean("powered", this.previousRedstoneState);
         compound.setBoolean("constvol", this.constvol);
+        compound.setBoolean("longtrig", this.longtrig);
         return compound;
     }
 
@@ -38,6 +47,7 @@ public class TileEntitySpeaker extends TileEntity {
         this.soundname = compound.getString("soundname");
         this.previousRedstoneState = compound.getBoolean("powered");
         this.constvol = compound.getBoolean("constvol");
+        this.longtrig = compound.getBoolean("longtrig");
     }
     
     public NBTTagCompound getUpdateTag()

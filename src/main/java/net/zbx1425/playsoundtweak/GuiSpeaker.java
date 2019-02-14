@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.lwjgl.input.Keyboard;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiLabel;
 import net.minecraft.client.gui.GuiScreen;
@@ -11,6 +12,7 @@ import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.network.play.client.CPacketUpdateSign;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -22,6 +24,7 @@ public class GuiSpeaker extends GuiScreen {
 	public GuiSpeaker(TileEntitySpeaker te) {
 		super();
 		this.te = te;
+		Keyboard.enableRepeatEvents(true);
 		//System.out.println("Gui Loaded!");
 	}
 	
@@ -35,11 +38,20 @@ public class GuiSpeaker extends GuiScreen {
 		GlStateManager.scale(.5, .5, .5);
 		this.fontRenderer.drawStringWithShadow(I18n.format("gui.speakerblock.credit"), 40, 70, -1);
 		this.fontRenderer.drawStringWithShadow(I18n.format("gui.speakerblock.hint"), 40, 100, -1);
-        this.fontRenderer.drawStringWithShadow(te.soundname, 40, 110, -1);
+		if (ClientProxy.validateResource(new ResourceLocation(te.soundname.trim()))) {
+			this.fontRenderer.drawStringWithShadow(te.soundname, 40, 110, -1);
+		} else {
+			this.fontRenderer.drawStringWithShadow(te.soundname, 40, 110, 0x00FF0000);
+		}
         if (te.constvol) {
         	this.fontRenderer.drawStringWithShadow(I18n.format("gui.speakerblock.constvol.yes"), 60, 130, -1);
         } else {
         	this.fontRenderer.drawStringWithShadow(I18n.format("gui.speakerblock.constvol.nop"), 60, 130, -1);
+        }
+        if (te.longtrig) {
+        	this.fontRenderer.drawStringWithShadow(I18n.format("gui.speakerblock.longtrig.yes"), 60, 140, -1);
+        } else {
+        	this.fontRenderer.drawStringWithShadow(I18n.format("gui.speakerblock.longtrig.nop"), 60, 140, -1);
         }
         this.drawRect(40, 120, this.width-80, 121, -1);
     }
@@ -55,8 +67,10 @@ public class GuiSpeaker extends GuiScreen {
         	te.soundname = "";
         }
         if (2<= keyCode && keyCode <=57) {
-        	if (typedChar=='/'||typedChar=='\\') {
+        	if (typedChar=='[') {
         		te.constvol = !te.constvol;
+        	} else if (typedChar==']') {
+        		te.longtrig = !te.longtrig;
         	} else {
         		te.soundname = (te.soundname + typedChar).trim();
         	}
@@ -67,24 +81,14 @@ public class GuiSpeaker extends GuiScreen {
 	public void onGuiClosed()
     {
         Keyboard.enableRepeatEvents(false);
-        /*NetHandlerPlayClient nethandlerplayclient = this.mc.getConnection();
-
-        if (nethandlerplayclient != null)
-        {
-            nethandlerplayclient.sendPacket(new CPacketUpdateSign(this.tileSign.getPos(), this.tileSign.signText));
-        }
-
-        this.tileSign.setEditable(true);*/
-        
-        //te.markDirty();
-       // te.getWorld().scheduleBlockUpdate(te.getPos(),te.getBlockType(),0,0);
-       // te.markDirty();
         MessageSpeaker msg = new MessageSpeaker();
+        msg.type = 0;
         msg.x = te.getPos().getX();
         msg.y = te.getPos().getY();
         msg.z = te.getPos().getZ();
         msg.audioname = te.soundname;
         msg.constvol = te.constvol;
+        msg.longtrig = te.longtrig;
         CommonProxy.snwinstance.sendToServer(msg);
     }
 }
