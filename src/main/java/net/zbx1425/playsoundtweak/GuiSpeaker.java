@@ -61,7 +61,9 @@ public class GuiSpeaker extends GuiScreen {
     {
         super.keyTyped(typedChar, keyCode);
         if (keyCode == 14) {
-        	te.soundname = (te.soundname.substring(0, te.soundname.length() - 1)).trim();
+			if (te.soundname.length() > 0){
+				te.soundname = (te.soundname.substring(0, te.soundname.length() - 1)).trim();
+			}
         }
         if (keyCode == 211) {
         	te.soundname = "";
