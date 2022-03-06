@@ -80,9 +80,11 @@ public class MessageSpeaker implements IMessage {
         		CommonProxy.snwinstance.sendToAll(message);
 	            break;
         	case 1:
-        	case 2:
         		CommonProxy.snwinstance.sendToAllAround(message,new TargetPoint(
         				ctx.getServerHandler().player.world.provider.getDimension(),message.x,message.y,message.z,128));
+        		break;
+        	case 2:
+        		CommonProxy.snwinstance.sendToAll(message);
         		break;
         	}
         	return null;
@@ -109,9 +111,9 @@ public class MessageSpeaker implements IMessage {
         	case 1:
         		if (ClientProxy.validateResource(new ResourceLocation(te.soundname.trim()))) {
 	        		if (te.constvol) {
-	        			te.soundcache = new SoundConstVol(new SoundEvent(new ResourceLocation(te.soundname.trim())));
+	        			te.soundcache = new SoundConstVol(SoundEvent.REGISTRY.getObject(new ResourceLocation(te.soundname.trim())));
 	                } else {
-	                	te.soundcache = new PositionedSoundRecord(new SoundEvent(new ResourceLocation(te.soundname.trim())), 
+	                	te.soundcache = new PositionedSoundRecord(SoundEvent.REGISTRY.getObject(new ResourceLocation(te.soundname.trim())), 
 	        					SoundCategory.RECORDS, 3.0f, 1.0f, message.x, message.y, message.z);
 	                }
 	        		Minecraft.getMinecraft().addScheduledTask(()->{

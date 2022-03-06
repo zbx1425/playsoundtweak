@@ -18,7 +18,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class TileEntitySpeaker extends TileEntity {
     public String soundname = "";
     public boolean constvol = false;
-    public boolean longtrig = false;
+    public boolean longtrig = true;
     public boolean previousRedstoneState = false;
     
     //A workaround to get this working on servers.
@@ -26,7 +26,7 @@ public class TileEntitySpeaker extends TileEntity {
     public Object soundcache;
     
     public TileEntitySpeaker() {
-    	soundname = "block.note.harp";
+    	soundname = "minecraft:block.note.harp";
     }
 
     public NBTTagCompound writeToNBT(NBTTagCompound compound)
